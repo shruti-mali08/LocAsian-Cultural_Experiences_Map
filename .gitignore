@@ -3,6 +3,54 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# ** used gen AI to come up with gitignore for the env **
+
+# Dependencies
+node_modules/
+package-lock.json  # (debatable - some teams commit this, some don't)
+
+# Environment variables
+.env
+.env.local
+
+# Build output
+dist/
+build/
+www/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+target/
+build/
+*.class
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Application properties with secrets
+application-local.properties
+application-dev.properties
+
+# Don't commit database data
+postgres-data/
+*.db
+
 # User-specific files
 *.rsuser
 *.suo
