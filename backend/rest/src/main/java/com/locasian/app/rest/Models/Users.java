@@ -1,9 +1,15 @@
 package com.locasian.app.rest.Models;
 import java.time.LocalDateTime;
+import javax.persistence.*;
 
+@Entity
 public class Users {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
+    @Column
     private String username;
+    @Column
     private LocalDateTime created_at;
 
 
