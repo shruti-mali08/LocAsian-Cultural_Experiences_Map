@@ -3,6 +3,8 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -39,12 +41,18 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>     { /* this is where the pages will be stored */ }
+      <IonRouterOutlet>
         <Route exact path="/home">
           <Home />
         </Route>
         <Route exact path="/search">
           <SearchPage />
+        </Route>
+        <Route exact path="/signIn">
+          <SignIn />
+        </Route>
+        <Route exact path="/signUp">
+          <SignUp />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
