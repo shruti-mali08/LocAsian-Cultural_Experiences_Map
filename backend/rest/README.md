@@ -8,10 +8,11 @@ There are 4 entities, Users, Event, Favorite, and Review. Each entity has their 
 * Favorite ...
 * Review ...
 The following link leads to an application called Postman which is being used to provide HTTP requests to get, post, update, and delete data form our MySQL database. 
-[Postman Collection Link]([https://jakefulton1-3616627.postman.co/workspace/Jake-Fulton's-Workspace~](https://jakefulton1-3616627.postman.co/workspace/Locasian-Postman-Workspace~ae34f0bb-319f-432a-8820-064eeb15202a/collection/undefined?action=share&creator=50115094)
+[Postman Collection Link](https://jakefulton1-3616627.postman.co/workspace/Jake-Fulton's-Workspace~](https://jakefulton1-3616627.postman.co/workspace/Locasian-Postman-Workspace~ae34f0bb-319f-432a-8820-064eeb15202a/collection/undefined?action=share&creator=50115094)
+I've managed the access of the collection of requests so that all of our team members can edit, as well as vonfrankenberg@pitt.edu (our professor) and hay149@pitt.edu (our TA). If you are having any trouble reaching it, please reach out to Jake Fulton at jkf31@pitt.edu
 It should be accessible in browsers, but if you'd like to work with the application itself, [here](https://www.postman.com/downloads/) is where you can download it.
 
-[Postman Collection Link]([https://jakefulton1-3616627.postman.co/workspace/Jake-Fulton's-Workspace~](https://jakefulton1-3616627.postman.co/workspace/Locasian-Postman-Workspace~ae34f0bb-319f-432a-8820-064eeb15202a/collection/undefined?action=share&creator=50115094)
+
 
 
 
