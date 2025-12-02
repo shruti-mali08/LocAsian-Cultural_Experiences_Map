@@ -12,11 +12,11 @@ public class Review {
     @Column
     private String body;
     @Column
-    private String user_id;
+    private String userId;
     @Column
     private int rating;
     @Column
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
 public long getId() {
     return id;
@@ -42,12 +42,12 @@ public void setBody(String body) {
     this.body = body;
 }
 
-public String getUser_id() {
-    return user_id;
+public String getUserId() {
+    return userId;
 }
 
-public void setUser_id(String user_id) {
-    this.user_id = user_id;
+public void setUserId(String userId) {
+    this.userId = userId;
 }
 
 public int getRating() {
@@ -58,12 +58,12 @@ public void setRating(int rating) {
     this.rating = rating;
 }
 
-public LocalDateTime getCreated_at() {
-    return created_at;
+public LocalDateTime getCreatedAt() {
+    return createdAt;
 }
 
-public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
+public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
 }
 
 }

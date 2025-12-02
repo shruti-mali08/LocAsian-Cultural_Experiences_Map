@@ -12,7 +12,7 @@ public class Favorite {
     @Column
     private String restaurantName;
     @Column
-    private LocalDateTime savedAt;
+    private LocalDateTime createdAt;
 
 public long getId() {
     return id;
@@ -38,11 +38,11 @@ public void setRestaurantName(String restaurantName) {
     this.restaurantName = restaurantName;
 } 
 
-public LocalDateTime getSavedAt() {
-    return savedAt;
+public LocalDateTime getCreatedAt() {
+    return createdAt;
 }
 
-public void setSavedAt(LocalDateTime savedAt) {
-    this.savedAt = savedAt;
+public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
 }
 }
