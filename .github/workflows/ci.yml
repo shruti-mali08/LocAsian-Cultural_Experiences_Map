@@ -1,0 +1,49 @@
+#generated with ai
+name: CI Build Check
+
+on:
+  pull_request:
+    branches: [ main, development ]
+  push:
+    branches: [ main, develoment ]
+
+jobs:
+  # Frontend build job
+  frontend-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: myApp/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./myApp
+      run: npm ci
+    
+    - name: Build frontend
+      working-directory: ./myApp
+      run: npm run build
+
+  # Backend build job
+  backend-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'maven'
+    
+    - name: Build with Maven
+      working-directory: ./backend
+      run: mvn clean install -DskipTests
