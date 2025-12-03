@@ -1,25 +1,25 @@
 package com.locasian.app.rest.Controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping; 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-
-import com.locasian.app.rest.Models.Users;
 import com.locasian.app.rest.Models.Event;
 import com.locasian.app.rest.Models.Favorite;
 import com.locasian.app.rest.Models.Review;
-
-import com.locasian.app.rest.Repo.UsersRepo;
+import com.locasian.app.rest.Models.Users;
 import com.locasian.app.rest.Repo.EventRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
+import com.locasian.app.rest.Repo.UsersRepo;
 
 
 @RestController
@@ -34,6 +34,9 @@ public class ApiControllers {
     @Autowired
     private ReviewRepo reviewRepo;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping("/")
     public String getPage() {
         return ("Welcome");
@@ -45,11 +48,11 @@ public class ApiControllers {
     }
 
     @PostMapping(value = "/saveUser")
-    public String saveUsers(@RequestBody Users user) {
-        usersRepo.save(user);
-        return "Saved...";
+    public Users createUser(@RequestBody Users user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return usersRepo.save(user);
     }
-
+    
     @PutMapping(value = "/updateUser/{userId}")
     public String updateUser(@PathVariable long userId, @RequestBody Users user) {
         Users updatedUser = usersRepo.findById(userId).get();
