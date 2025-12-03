@@ -6,14 +6,36 @@ import './SignIn.css';
 
 const SignIn: React.FC = () => {
   const history = useHistory();
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSignIn = () => {
-    //sign in logic fill in later
-    setErrorMessage('Invalid username or password');
+  const [usernameValue, setUsernameValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
 
-    //if (authSuccess) {navigate to home screen}
-    //else {set error message}
+  const handleSignIn = async () => {
+  // AI generated code snippit for handling sign up logic 
+    try {
+      const response = await fetch('http://localhost:8080/User', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'testuser',
+          password: 'password123'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Success!
+        history.push('/Home');
+      } else {
+        // Error
+        console.error(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error(`Network error`);
+    }
   }
 
 
@@ -37,6 +59,7 @@ const SignIn: React.FC = () => {
               labelPlacement='stacked'
               clearInput = {true}
               placeholder="Enter username"
+              onIonChange={e => setUsernameValue(e.detail.value!)}
               ></IonInput>
         </IonItem>
 
@@ -50,6 +73,7 @@ const SignIn: React.FC = () => {
             fill = "solid"
             placeholder="Enter password"
             clearInput = {true}
+            onIonChange={e => setPasswordValue(e.detail.value!)}
           ></IonInput>
         </IonItem>
 
@@ -60,7 +84,7 @@ const SignIn: React.FC = () => {
           shape = "round" 
           fill = "outline" 
           color = 'light'
-          onClick={() => history.push('/Home')}
+          onClick={handleSignIn}
         >Log In</IonButton>
 
         {/* Sign up button */}
