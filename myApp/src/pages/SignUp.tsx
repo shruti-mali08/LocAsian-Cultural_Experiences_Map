@@ -1,14 +1,40 @@
 import { IonContent, IonPage, IonButton, IonLabel, IonItem, IonInput} from '@ionic/react';
 import './SignIn.css';
+import { useHistory } from 'react-router';
 import {useState} from 'react';
 import AppLogo from '../assets/icons/AppLogo.svg';
 
 const SignUp: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState('');
+  const history = useHistory();
+  const [usernameValue, setUsernameValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
 
-  const handleSignUp = () => {
-    //sign up logic fill in later
-    
+  const handleSignUp = async () => {
+  // AI generated code snippit for handling sign up logic 
+    try {
+      const response = await fetch('http://localhost:8080/saveUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'testuser',
+          password: 'password123'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Success!
+        history.push('/Home');
+      } else {
+        // Error
+        console.error(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error(`Network error`);
+    }
   }
 
   return (
@@ -30,6 +56,7 @@ const SignUp: React.FC = () => {
               labelPlacement='stacked'
               clearInput = {true}
               placeholder="Enter username"
+              onIonChange={e => setUsernameValue(e.detail.value!)}
               ></IonInput>
         </IonItem>
 
@@ -42,6 +69,7 @@ const SignUp: React.FC = () => {
             type="password" 
             fill = "solid"
             placeholder="Enter password"
+            onIonChange={e => setPasswordValue(e.detail.value!)}
             clearInput = {true}
           ></IonInput>
         </IonItem>
