@@ -45,5 +45,5 @@ jobs:
         cache: 'maven'
     
     - name: Build with Maven
-      working-directory: ./backend
+      working-directory: ./backend/rest
       run: mvn clean install -DskipTests
