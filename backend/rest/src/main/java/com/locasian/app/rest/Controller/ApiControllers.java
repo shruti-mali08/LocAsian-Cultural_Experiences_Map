@@ -137,7 +137,7 @@ public class ApiControllers {
         return "Saved...";
     }
 
-    @PutMapping(value = "/updateReview/{id}")//title body userId rating
+    @PutMapping(value = "/updateReview/{id}")
     public String updateReview(@PathVariable long id, @RequestBody Review review) {
         Review updatedReview = reviewRepo.findById(id).get();
         updatedReview.setTitle(review.getTitle());
