@@ -1,0 +1,24 @@
+.like-button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -200px); 
+}
+
+.like-button {
+  --background: transparent;
+  --background-hover: transparent;
+  --border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.like-button.liked {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
