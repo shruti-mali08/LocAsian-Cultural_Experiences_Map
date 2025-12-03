@@ -6,39 +6,52 @@ import AppLogo from '../assets/icons/AppLogo.svg';
 
 const SignUp: React.FC = () => {
   const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState('');
   const [usernameValue, setUsernameValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
 
   const handleSignUp = async () => {
   // AI generated code snippit for handling sign up logic 
-    try {
-      const response = await fetch('http://localhost:8080/saveUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'testuser',
-          password: 'password123'
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Success!
-        history.push('/Home');
-      } else {
-        // Error
-        console.error(`Error: ${data.message}`);
-      }
-    } catch (error) {
-      console.error(`Network error`);
+    const response = await fetch('http://localhost:8080/saveUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: usernameValue,
+        password: passwordValue
+      })
+    });
+
+    console.log('Response status:', response.status);
+
+    if (response.ok) {
+      // SUCCESS! User was saved
+      console.log('User saved successfully!');
+      history.replace('/home');
+    } else {
+      // ERROR from backend
+      const errorText = await response.text();
+      setErrorMessage(errorText || 'Sign up failed');
     }
   }
 
+
   return (
     <IonPage>
+      {errorMessage && (
+       <div style={{ 
+        color: 'red', 
+        marginTop: '20px', 
+        textAlign: 'center',
+        padding: '10px',
+        backgroundColor: '#ffe6e6',
+        borderRadius: '5px'
+        }}>
+          {errorMessage}
+      </div>
+      )}
+
       <IonContent className="ion-padding reggae-font" style={{ '--background': '#C5472A' }}>
         
         <img src={AppLogo} alt="Logo" style={{ width: '141px', margin: '20px auto', display: 'block' }} />
