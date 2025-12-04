@@ -33,6 +33,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import FavoritesPage from './pages/FavoritePage';
 
 setupIonicReact();
 
@@ -43,6 +44,11 @@ const App: React.FC = () => (
         <Route exact path="/home">
           <Home />
         </Route>
+
+        <Route exact path="/favorites">
+          <FavoritesPage />
+        </Route>
+        
         <Route exact path="/search">
           <SearchPage />
         </Route>
