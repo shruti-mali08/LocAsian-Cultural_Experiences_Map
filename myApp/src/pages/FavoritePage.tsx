@@ -1,5 +1,5 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon } from '@ionic/react';
-import { locationOutline, trashBinOutline } from 'ionicons/icons';
+import { IonBackButton, IonButtons, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon } from '@ionic/react';
+import { locationOutline, trashBinOutline, arrowUndoCircleOutline } from 'ionicons/icons';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -48,7 +48,12 @@ const FavoritesPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <div style ={{ display: 'flex'}}>
+          <IonButton onClick={() => history.push('/home')}>
+            <IonIcon icon={arrowUndoCircleOutline} />
+          </IonButton>
           <IonTitle>Favorites</IonTitle>
+          </div>
         </IonToolbar>
       </IonHeader>
 

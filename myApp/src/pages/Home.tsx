@@ -192,9 +192,11 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <div style={{ display: "flex", gap: "10px", margin: "15px", alignItems: "center" }}>
           <IonIcon icon={appLogo} size="large" color="primary"></IonIcon>
           <IonSearchbar></IonSearchbar>
           <IonIcon icon={personCircle} size="large" color="primary"></IonIcon>
+          </div>
           <IonSegment scrollable={true}>
             <IonSegmentButton value="favorite" onClick={() => history.push('/favorites')}>
               <IonIcon icon={favorite}></IonIcon>
