@@ -6,35 +6,34 @@ import './SignIn.css';
 
 const SignIn: React.FC = () => {
   const history = useHistory();
-
+  
+  const [errorMessage, setErrorMessage] = useState('');
   const [usernameValue, setUsernameValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
 
   const handleSignIn = async () => {
   // AI generated code snippit for handling sign up logic 
-    try {
-      const response = await fetch('http://localhost:8080/User', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'testuser',
-          password: 'password123'
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Success!
-        history.push('/Home');
-      } else {
-        // Error
-        console.error(`Error: ${data.message}`);
-      }
-    } catch (error) {
-      console.error(`Network error`);
+    const response = await fetch('http://localhost:8080/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: usernameValue,
+        password: passwordValue
+      })
+    });
+
+    console.log('Response status:', response.status);
+
+    if (response.ok) {
+      // SUCCESS! User was saved
+      console.log('User login successful!');
+      history.replace('/home');
+    } else {
+      // ERROR from backend
+      const errorText = await response.text();
+      setErrorMessage(errorText || 'Sign in failed');
     }
   }
 
