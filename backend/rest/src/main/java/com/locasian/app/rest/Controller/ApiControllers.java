@@ -78,6 +78,44 @@ public class ApiControllers {
         return "Saved...";
     }
 
+    // Get all favourites for a specific user
+@GetMapping("/users/{userId}/favorites")
+public List<Favorite> getFavoritesByUser(@PathVariable String userId) {
+  return favoriteRepo.findByUserId(userId);
+}
+
+// Add a favourite for a user
+@PostMapping("/users/{userId}/favorites")
+public Favorite addFavoriteForUser(
+ @PathVariable String userId,
+ @RequestBody Favorite favorite
+) {
+    // Avoid duplicates: if this user already favourited this restaurant, just return it
+ Favorite existing = favoriteRepo.findByUserIdAndRestaurantName(
+  userId,
+  favorite.getRestaurantName()
+ );
+ if(existing != null){
+  return existing;
+ }
+
+ favorite.setUserId(userId);
+  if (favorite.getCreatedAt() == null) {
+ favorite.setCreatedAt(java.time.LocalDateTime.now());
+ }
+  return favoriteRepo.save(favorite);
+}
+
+// Remove a favourite for a user + restaurant
+@DeleteMapping("/users/{userId}/favorites/{restaurantName}")
+public String deleteFavoriteForUser(
+  @PathVariable String userId,
+   @PathVariable String restaurantName
+) {
+ favoriteRepo.deleteByUserIdAndRestaurantName(userId, restaurantName);
+  return "Deleted favorite for user " + userId + " and restaurant " + restaurantName;
+}
+
     @PutMapping(value = "/updateEvent/{eventId}")
     public String updateEvent(@PathVariable long eventId, @RequestBody Event event) {
         Event updatedEvent = eventRepo.findById(eventId).get();
