@@ -84,7 +84,13 @@ const SignIn: React.FC = () => {
           fill = "outline" 
           color = 'light'
           onClick={handleSignIn}
-        >Log In</IonButton>
+        >Log In</IonButton> {
+          errorMessage && (
+            <div style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>
+              {errorMessage}
+            </div>
+          )
+        }
 
         {/* Sign up button */}
         <div style={{ textAlign: 'center', marginTop: '20px' }}>

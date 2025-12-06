@@ -10,8 +10,19 @@ const SignUp: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
 
+  
   const handleSignUp = async () => {
-  // AI generated code snippit for handling sign up logic 
+    // AI generated code snippit for handling sign up logic 
+
+    //return a boolean for whether the username is unique
+    const uniqueUser = await fetch(`http://localhost:8080/auth/checkUsername?username=${usernameValue}`);
+    
+    const isUnique = await uniqueUser.json(); 
+  
+    if(!isUnique){
+      setErrorMessage('Username is already taken. Please choose another one.');
+      return;
+    }
     const response = await fetch('http://localhost:8080/saveUser', {
       method: 'POST',
       headers: {
@@ -95,7 +106,13 @@ const SignUp: React.FC = () => {
           fill = "outline" 
           color = 'light'
           onClick=  {handleSignUp}
-        >Log In</IonButton>
+        >Sign Up</IonButton> {
+          errorMessage && (
+            <div style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>
+              {errorMessage}
+            </div>
+          )
+        }
 
       </IonContent>
     </IonPage>

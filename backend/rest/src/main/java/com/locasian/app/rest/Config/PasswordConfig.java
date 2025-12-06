@@ -1,4 +1,4 @@
-package com.locasian.app.rest.Config;
+package com.locasian.app.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

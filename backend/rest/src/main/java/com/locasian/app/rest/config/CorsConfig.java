@@ -1,4 +1,4 @@
-package com.locasian.app.rest.Config;
+package com.locasian.app.rest.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
