@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonSearchbar, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/react';
 import { personCircle, heart, heartOutline } from 'ionicons/icons';
-import { GoogleMap } from '@capacitor/google-maps';
-import { useRef, useState, useEffect, use } from 'react';
+// import { GoogleMap } from '@capacitor/google-maps';
+import { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { getFavorites, saveFavorite, removeFavorite } from '../services/favoriteService';
@@ -14,12 +14,17 @@ import cart from '../assets/icons/cart.svg'
 import temple from '../assets/icons/temple.svg';
 import events from '../assets/icons/event.svg'
 
+import snazzyMapStyle from '../assets/mapStyle/snazzyMapStyle.json';
+console.log("Loaded snazzy style");
+
+
 import './Home.css';
 
 const Home: React.FC = () => {
-  const key = "AIzaSyCP8EsvZJGXQoJhkD5P9Sukkrp4ypF4KEU";
-  const mapRef = useRef<HTMLElement | null>(null);
-  const mapInstanceRef = useRef<GoogleMap | null>(null);
+  // const key = "AIzaSyCP8EsvZJGXQoJhkD5P9Sukkrp4ypF4KEU";
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  // const mapInstanceRef = useRef<GoogleMap | null>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
 
   // --------------------------------
   // STATE
@@ -89,47 +94,38 @@ const Home: React.FC = () => {
   const createMap = async () => {
     if (!mapRef.current) return;
 
-    const newMap = await GoogleMap.create({
-      id: "google-map",
-      element: mapRef.current,
-      apiKey: key,
-      config: {
-        center: {
-          lat: 40.43717459124654,
-          lng: -79.95690639142943
-        },
-        zoom: 15.3
-      }
+    const newMap = new google.maps.Map(mapRef.current, {
+      center: {
+        lat: 40.43717459124654,
+        lng: -79.95690639142943
+      },
+      zoom: 15,
+      styles: snazzyMapStyle,
     });
-
-    mapInstanceRef.current = newMap;
 
     // Map click listener
-    newMap.setOnMapClickListener(async (event) => {
-      const posKey = generatePositionKey(event.latitude, event.longitude);
+    newMap.addListener("click", (event: google.maps.MapMouseEvent) => {
+      if (!event.latLng) return;
+      const lat = event.latLng.lat();
+      const lng = event.latLng.lng();
+      const posKey = generatePositionKey(lat, lng);
 
-      console.log('='.repeat(40));
-      console.log(' Clicked:', posKey);
-
-      setClickedPosition({ lat: event.latitude, lng: event.longitude });
-
+      setClickedPosition({ lat, lng });
       setCurrentPositionKey(posKey);
 
-      // Check favorite status
-      const isSaved = isLocationFavorited(event.latitude, event.longitude);
+      const isSaved = isLocationFavorited(lat, lng);
       setIsLiked(isSaved);
-
-      console.log(`Favorite status: ${isSaved ? ' Favorited' : ' Not favorited'}`);
-      console.log('='.repeat(40));
-
       setShowLikeButton(true);
+
+      console.log("Clicked position: ", lat, lng, "Favorite:", isSaved);
     });
+    mapInstanceRef.current = newMap;
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    if(mapRef.current) {
       createMap();
-    }, 300);
+    }
   }, []);
 
 
@@ -193,9 +189,9 @@ const Home: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <div style={{ display: "flex", gap: "10px", margin: "15px", alignItems: "center" }}>
-          <IonIcon icon={appLogo} size="large" color="primary"></IonIcon>
-          <IonSearchbar></IonSearchbar>
-          <IonIcon icon={personCircle} size="large" color="primary"></IonIcon>
+            <IonIcon icon={appLogo} size="large" color="primary"></IonIcon>
+            <IonSearchbar></IonSearchbar>
+            <IonIcon icon={personCircle} size="large" color="primary"></IonIcon>
           </div>
           <IonSegment scrollable={true}>
             <IonSegmentButton value="favorite" onClick={() => history.push('/favorites')}>
@@ -228,14 +224,10 @@ const Home: React.FC = () => {
 
       <IonContent fullscreen>
         <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-          <capacitor-google-map
+          <div
             ref={mapRef}
-            style={{
-              display: 'inline-block',
-              width: "100%",
-              height: "100%"
-            }}
-          ></capacitor-google-map>
+            style={{ width: "100%", height: "100%" }}
+          ></div>
 
           {/* Debug buttons */}
           <div style={{
