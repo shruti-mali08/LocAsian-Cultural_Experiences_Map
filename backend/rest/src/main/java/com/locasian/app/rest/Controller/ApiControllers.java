@@ -1,5 +1,7 @@
 package com.locasian.app.rest.Controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping; 
@@ -21,7 +23,7 @@ import com.locasian.app.rest.Repo.EventRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
 
-
+@CrossOrigin(origins = "http://localhost:8100")
 @RestController
 public class ApiControllers {
 

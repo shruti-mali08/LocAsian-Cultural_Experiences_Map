@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   // STATE
   // --------------------------------
 
-  const [favoriteLocations, setFavoriteLocations] = useState<Record<string, boolean>>({});
+  const [favoriteLocations, setFavoriteLocations] = useState<Record<string, any>>({});
   const [showLikeButton, setShowLikeButton] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [clickedPosition, setClickedPosition] = useState<{ lat: number, lng: number } | null>(null);
