@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 import com.locasian.app.rest.Models.Users;
-import com.locasian.app.rest.Models.Event;
+import com.locasian.app.rest.Models.Location;
 import com.locasian.app.rest.Models.Favorite;
 import com.locasian.app.rest.Models.Review;
 
 import com.locasian.app.rest.Repo.UsersRepo;
-import com.locasian.app.rest.Repo.EventRepo;
+import com.locasian.app.rest.Repo.LocationRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
 
@@ -30,7 +30,7 @@ public class ApiControllers {
     @Autowired
     private UsersRepo usersRepo;
     @Autowired
-    private EventRepo eventRepo;
+    private LocationRepo locationRepo;
     @Autowired
     private FavoriteRepo favoriteRepo;
     @Autowired
@@ -69,14 +69,14 @@ public class ApiControllers {
         return "Delete user with the id: "+userId;
     }
 
-    @GetMapping(value = "/events")
-    public List<Event> getEvents() {
-        return eventRepo.findAll();
+    @GetMapping(value = "/locations")
+    public List<Location> getLocations() {
+        return locationRepo.findAll();
     }
 
-    @PostMapping(value = "/saveEvent")
-    public String saveEvent(@RequestBody Event event) {
-        eventRepo.save(event);
+    @PostMapping(value = "/saveLocation")
+    public String saveLocation(@RequestBody Location location) {
+        locationRepo.save(location);
         return "Saved...";
     }
 
@@ -118,24 +118,22 @@ public String deleteFavoriteForUser(
   return "Deleted favorite for user " + userId + " and restaurant " + restaurantName;
 }
 
-    @PutMapping(value = "/updateEvent/{eventId}")
-    public String updateEvent(@PathVariable long eventId, @RequestBody Event event) {
-        Event updatedEvent = eventRepo.findById(eventId).get();
-        updatedEvent.setTitle(event.getTitle()); 
-        updatedEvent.setBody(event.getBody());
-        updatedEvent.setAuthorId(event.getAuthorId());
-        updatedEvent.setStartTime(event.getStartTime());
-        updatedEvent.setEndTime(event.getEndTime());
-        updatedEvent.setCreatedAt(event.getCreatedAt());
-        eventRepo.save(updatedEvent);
+    @PutMapping(value = "/updateLocation/{locationId}")
+    public String updateLocation(@PathVariable long locationId, @RequestBody Location location) {
+        Location updatedLocation = locationRepo.findById(locationId).get();
+        updatedLocation.setName(location.getName()); 
+        updatedLocation.setDetails(location.getDetails());
+        updatedLocation.setAddress(location.getAddress());
+        updatedLocation.setCreatedAt(location.getCreatedAt());
+        locationRepo.save(updatedLocation);
         return "Updated...";
     }
 
-    @DeleteMapping(value = "/deleteEvent/{id}")
-    public String deleteEvent(@PathVariable long id) {
-        Event deleteEvent = eventRepo.findById(id).get();
-        eventRepo.delete(deleteEvent);
-        return "Delete event with the id: "+id;
+    @DeleteMapping(value = "/deleteLocation/{id}")
+    public String deleteLocation(@PathVariable long id) {
+        Location deleteLocation = locationRepo.findById(id).get();
+        locationRepo.delete(deleteLocation);
+        return "Delete location with the id: "+id;
     }
 
     @GetMapping(value = "/favorites")
