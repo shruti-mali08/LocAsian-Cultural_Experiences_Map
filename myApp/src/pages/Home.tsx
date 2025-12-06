@@ -1,6 +1,5 @@
 import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonSearchbar, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/react';
 import { personCircle, heart, heartOutline } from 'ionicons/icons';
-// import { GoogleMap } from '@capacitor/google-maps';
 import { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -17,14 +16,16 @@ import events from '../assets/icons/event.svg'
 import snazzyMapStyle from '../assets/mapStyle/snazzyMapStyle.json';
 console.log("Loaded snazzy style");
 
-
 import './Home.css';
 
 const Home: React.FC = () => {
-  // const key = "AIzaSyCP8EsvZJGXQoJhkD5P9Sukkrp4ypF4KEU";
   const mapRef = useRef<HTMLDivElement | null>(null);
-  // const mapInstanceRef = useRef<GoogleMap | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  
+  // Add geocoder ref
+  const geocoderRef = useRef<google.maps.Geocoder | null>(null);
+  // Add marker ref
+  const markerRef = useRef<google.maps.Marker | null>(null);
 
   // --------------------------------
   // STATE
@@ -35,8 +36,19 @@ const Home: React.FC = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [clickedPosition, setClickedPosition] = useState<{ lat: number, lng: number } | null>(null);
   const [currentPositionKey, setCurrentPositionKey] = useState<string>('');
+  
+  // Add selected place info state
+  const [selectedPlace, setSelectedPlace] = useState<{
+    name: string;
+    address: string;
+    lat: number;
+    lng: number;
+  } | null>(null);
+  
+  // Add error state
+  const [geocodeError, setGeocodeError] = useState<string | null>(null);
 
-  const history = useHistory();       // Used elsewhere in the file to navigate when an IonSegment button is clicked.
+  const history = useHistory();
 
   // --------------------------------
   // FETCH FAVORITES ON LOAD
@@ -63,7 +75,91 @@ const Home: React.FC = () => {
 
   const isLocationFavorited = (lat: number, lng: number): boolean => {
     const posKey = generatePositionKey(lat, lng);
-    return !!favoriteLocations[posKey]; // true if saved, false otherwise
+    return !!favoriteLocations[posKey];
+  };
+
+  // Simplified place name fetching function
+  const getPlaceNameFromCoordinates = async (lat: number, lng: number): Promise<{
+    name: string;
+    address: string;
+  }> => {
+    // If no geocoder, return default value
+    if (!geocoderRef.current) {
+      return {
+        name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+        address: ""
+      };
+    }
+
+    try {
+      // Try using Google Geocoder
+      const response = await geocoderRef.current.geocode({
+        location: { lat, lng }
+      });
+
+      if (response.results && response.results.length > 0) {
+        const result = response.results[0];
+        
+        // Try to extract better name
+        let bestName = result.formatted_address;
+        
+        // Check for establishment name
+        if (result.address_components) {
+          for (const comp of result.address_components) {
+            if (comp.types.includes('establishment') || 
+                comp.types.includes('point_of_interest') ||
+                comp.types.includes('park') ||
+                comp.types.includes('natural_feature')) {
+              bestName = comp.long_name;
+              break;
+            }
+          }
+        }
+        
+        return {
+          name: bestName,
+          address: result.formatted_address
+        };
+      }
+      
+      // If no results, return coordinates
+      return {
+        name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+        address: ""
+      };
+      
+    } catch (error) {
+      console.error("❌ Geocoder failed:", error);
+      
+      // Try using free open-source service as fallback
+      try {
+        const osmResponse = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+          {
+            headers: {
+              'Accept-Language': 'en-US',
+              'User-Agent': 'YourApp/1.0'
+            }
+          }
+        );
+        
+        const osmData = await osmResponse.json();
+        if (osmData.display_name) {
+          return {
+            name: osmData.display_name.split(',')[0], // Take first part as name
+            address: osmData.display_name
+          };
+        }
+      } catch (osmError) {
+        console.error("OpenStreetMap also failed:", osmError);
+      }
+      
+      // All methods failed, return coordinates
+      return {
+        name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+        address: ""
+      };
+    }
   };
 
   // Check current state
@@ -71,7 +167,6 @@ const Home: React.FC = () => {
     console.log('='.repeat(40));
     console.log('🔍 Checking state');
     console.log('React state:', favoriteLocations);
-    // console.log('Ref state:', favoriteLocationsRef.current);
     console.log('localStorage:', localStorage.getItem('favoriteLocations'));
     console.log('Current key:', currentPositionKey);
     console.log('Current favorite:', isLiked);
@@ -103,22 +198,85 @@ const Home: React.FC = () => {
       styles: snazzyMapStyle,
     });
 
-    // Map click listener
-    newMap.addListener("click", (event: google.maps.MapMouseEvent) => {
+    // Initialize geocoder
+    geocoderRef.current = new google.maps.Geocoder();
+
+    // Map click listener - modified for more reliable way
+    newMap.addListener("click", async (event: google.maps.MapMouseEvent) => {
       if (!event.latLng) return;
+      
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       const posKey = generatePositionKey(lat, lng);
-
+      
+      // Immediately show favorite panel, don't wait for geocoding
       setClickedPosition({ lat, lng });
       setCurrentPositionKey(posKey);
-
       const isSaved = isLocationFavorited(lat, lng);
       setIsLiked(isSaved);
       setShowLikeButton(true);
+      
+      // Immediately set default name (coordinates)
+      setSelectedPlace({
+        name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+        address: "",
+        lat: lat,
+        lng: lng
+      });
 
-      console.log("Clicked position: ", lat, lng, "Favorite:", isSaved);
+      // Clear previous marker
+      if (markerRef.current) {
+        markerRef.current.setMap(null);
+      }
+
+      // Add new marker (show immediately)
+      markerRef.current = new google.maps.Marker({
+        position: { lat, lng },
+        map: newMap,
+        title: "Clicked location",
+        animation: google.maps.Animation.DROP
+      });
+
+      console.log("📍 Clicked position:", lat, lng);
+      console.log("🔄 Fetching place name...");
+
+      // Asynchronously get place name (in background)
+      setTimeout(async () => {
+        try {
+          const placeInfo = await getPlaceNameFromCoordinates(lat, lng);
+          
+          console.log("✅ Got place name:", placeInfo.name);
+          
+          // Update place info
+          setSelectedPlace({
+            name: placeInfo.name,
+            address: placeInfo.address,
+            lat: lat,
+            lng: lng
+          });
+          
+          // Update marker title
+          if (markerRef.current) {
+            markerRef.current.setTitle(placeInfo.name);
+          }
+          
+          setGeocodeError(null);
+          
+        } catch (error) {
+          console.error("❌ Failed to get place name:", error);
+          setGeocodeError("Unable to get place name, please check network connection or API key");
+          
+          // Keep default coordinate name
+          setSelectedPlace({
+            name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+            address: "",
+            lat: lat,
+            lng: lng
+          });
+        }
+      }, 100); // Delay 100ms to let UI respond first
     });
+
     mapInstanceRef.current = newMap;
   };
 
@@ -128,7 +286,6 @@ const Home: React.FC = () => {
     }
   }, []);
 
-
   // --------------------------------
   // LIKE - UNLIKE HANDLER
   // --------------------------------
@@ -137,25 +294,43 @@ const Home: React.FC = () => {
     if (!clickedPosition) return;
 
     const poskey = `${clickedPosition.lat.toFixed(6)}_${clickedPosition.lng.toFixed(6)}`;
-    console.log('='.repeat(40));
 
     if (isLiked) {
       const updated = await removeFavorite(poskey);
       setFavoriteLocations(updated);
       setIsLiked(false);
-
       console.log('🗑️ Removed from favorites');
     }
     else {
-      const updated = await saveFavorite(poskey);
-      setFavoriteLocations(updated);
+      const favoriteData = {
+        id: poskey,
+        name: selectedPlace ? selectedPlace.name : `Location (${clickedPosition.lat.toFixed(4)}, ${clickedPosition.lng.toFixed(4)})`,
+        address: selectedPlace?.address || "",
+        lat: clickedPosition.lat,
+        lng: clickedPosition.lng,
+        timestamp: Date.now()
+      };
+      
+      console.log('💾 Saved to favorites:', favoriteData.name);
+      
+      // Save to localStorage
+      const existing = JSON.parse(localStorage.getItem('favoriteLocations') || '{}');
+      existing[poskey] = favoriteData;
+      localStorage.setItem('favoriteLocations', JSON.stringify(existing));
+      
+      // Update state
+      setFavoriteLocations(existing);
       setIsLiked(true);
-
-      console.log('💾 Saved to favorites');
     }
   };
 
-  const handleCloseButton = () => setShowLikeButton(false);
+  const handleCloseButton = () => {
+    // Clear marker
+    if (markerRef.current) {
+      markerRef.current.setMap(null);
+    }
+    setShowLikeButton(false);
+  };
 
   // --------------------------------
   // GOOGLE POPUP DETECTION
@@ -270,6 +445,41 @@ const Home: React.FC = () => {
             </button>
           </div>
 
+          {/* Error message */}
+          {geocodeError && (
+            <div style={{
+              position: 'fixed',
+              top: '150px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 10000,
+              background: '#ffebee',
+              color: '#c62828',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span>⚠️</span>
+              <span>{geocodeError}</span>
+              <button 
+                onClick={() => setGeocodeError(null)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#c62828',
+                  fontSize: '16px',
+                  cursor: 'pointer'
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
+
           {/* Favorite button panel */}
           {showLikeButton && clickedPosition && (
             <div style={{
@@ -281,19 +491,64 @@ const Home: React.FC = () => {
               borderRadius: '12px',
               padding: '15px',
               boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-              minWidth: '180px'
+              minWidth: '280px',
+              maxWidth: '350px'
             }}>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 marginBottom: '12px',
                 paddingBottom: '8px',
                 borderBottom: '1px solid #eee'
               }}>
-                <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                  {isLiked ? '✓ Favorited' : 'Save Location'}
+                <div style={{ flex: 1 }}>
+                  {/* Display place name */}
+                  <div style={{ 
+                    fontSize: '16px', 
+                    fontWeight: '600', 
+                    color: '#333', 
+                    marginBottom: '4px',
+                    wordBreak: 'break-word'
+                  }}>
+                    {selectedPlace?.name || `Location (${clickedPosition.lat.toFixed(4)}, ${clickedPosition.lng.toFixed(4)})`}
+                  </div>
+                  
+                  {/* Display detailed address */}
+                  {selectedPlace?.address && selectedPlace.address !== selectedPlace.name && (
+                    <div style={{ 
+                      fontSize: '12px', 
+                      color: '#666', 
+                      marginTop: '4px',
+                      wordBreak: 'break-word'
+                    }}>
+                      {selectedPlace.address}
+                    </div>
+                  )}
+                  
+                  {/* Coordinate info */}
+                  <div style={{
+                    fontSize: '10px',
+                    color: '#888',
+                    marginTop: '6px',
+                    fontFamily: 'monospace'
+                  }}>
+                    {currentPositionKey}
+                  </div>
+                  
+                  {/* Display loading status */}
+                  {!selectedPlace?.address && (
+                    <div style={{
+                      fontSize: '11px',
+                      color: '#999',
+                      marginTop: '6px',
+                      fontStyle: 'italic'
+                    }}>
+                      Fetching place information...
+                    </div>
+                  )}
                 </div>
+                
                 <button
                   onClick={handleCloseButton}
                   style={{
@@ -304,23 +559,13 @@ const Home: React.FC = () => {
                     color: '#666',
                     padding: '0',
                     width: '24px',
-                    height: '24px'
+                    height: '24px',
+                    flexShrink: 0,
+                    marginLeft: '10px'
                   }}
                 >
                   ×
                 </button>
-              </div>
-
-              <div style={{
-                fontSize: '11px',
-                color: '#666',
-                marginBottom: '12px',
-                fontFamily: 'monospace',
-                backgroundColor: '#f8f9fa',
-                padding: '6px 8px',
-                borderRadius: '4px'
-              }}>
-                {currentPositionKey}
               </div>
 
               <IonButton
@@ -336,7 +581,7 @@ const Home: React.FC = () => {
                   icon={isLiked ? heart : heartOutline}
                   slot="start"
                 />
-                {isLiked ? 'Remove' : 'Save'}
+                {isLiked ? 'Remove Favorite' : 'Add to Favorites'}
               </IonButton>
             </div>
           )}
