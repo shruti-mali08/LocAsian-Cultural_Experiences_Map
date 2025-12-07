@@ -63,7 +63,8 @@ public class ApiControllers {
                     .badRequest()
                     .body("Username already exists");
         }
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
         usersRepo.save(user);
         return ResponseEntity.ok("User saved successfully");
     }
