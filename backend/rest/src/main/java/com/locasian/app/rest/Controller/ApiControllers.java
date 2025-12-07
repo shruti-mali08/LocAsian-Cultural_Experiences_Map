@@ -1,6 +1,7 @@
 package com.locasian.app.rest.Controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,13 +110,14 @@ public Favorite addFavoriteForUser(
 }
 
 // Remove a favourite for a user + restaurant
-@DeleteMapping("/users/{userId}/favorites/{restaurantName}")
-public String deleteFavoriteForUser(
-  @PathVariable String userId,
-   @PathVariable String restaurantName
+@DeleteMapping("/users/{userId}/favorites/{restaurantName:.+}")
+public ResponseEntity<Void> deleteFavoriteForUser(
+        @PathVariable String userId,
+        @PathVariable String restaurantName
 ) {
- favoriteRepo.deleteByUserIdAndRestaurantName(userId, restaurantName);
-  return "Deleted favorite for user " + userId + " and restaurant " + restaurantName;
+    favoriteRepo.deleteByUserIdAndRestaurantName(userId, restaurantName);
+  
+    return ResponseEntity.noContent().build();
 }
 
     @PutMapping(value = "/updateEvent/{eventId}")
