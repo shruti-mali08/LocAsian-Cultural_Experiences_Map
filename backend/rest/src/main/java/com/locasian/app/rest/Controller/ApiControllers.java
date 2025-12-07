@@ -24,7 +24,7 @@ import com.locasian.app.rest.Repo.EventRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
 
-@CrossOrigin(origins = "http://localhost:8100")
+@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:8100" })
 @RestController
 public class ApiControllers {
 
@@ -110,14 +110,24 @@ public Favorite addFavoriteForUser(
 }
 
 // Remove a favourite for a user + restaurant
-@DeleteMapping("/users/{userId}/favorites/{restaurantName:.+}")
-public ResponseEntity<Void> deleteFavoriteForUser(
+@DeleteMapping("/users/{userId}/favorites/{restaurantName}")
+public ResponseEntity<String> deleteFavoriteForUser(
         @PathVariable String userId,
         @PathVariable String restaurantName
 ) {
-    favoriteRepo.deleteByUserIdAndRestaurantName(userId, restaurantName);
-  
-    return ResponseEntity.noContent().build();
+    System.out.println("DELETE favorite: userId=" + userId + ", restaurantName=" + restaurantName);
+
+    Favorite existing = favoriteRepo.findByUserIdAndRestaurantName(userId, restaurantName);
+
+    if (existing == null) {
+        // nothing in DB with that key – return 404 instead of throwing a 500
+        return ResponseEntity.notFound().build();
+    }
+
+    favoriteRepo.delete(existing);
+    return ResponseEntity.ok(
+            "Deleted favorite for user " + userId + " and restaurant " + restaurantName
+    );
 }
 
     @PutMapping(value = "/updateEvent/{eventId}")
