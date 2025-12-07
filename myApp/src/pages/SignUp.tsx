@@ -51,16 +51,15 @@ const SignUp: React.FC = () => {
   return (
     <IonPage>
       {errorMessage && (
-       <div style={{ 
-        color: 'red', 
-        marginTop: '20px', 
-        textAlign: 'center',
-        padding: '10px',
-        backgroundColor: '#ffe6e6',
-        borderRadius: '5px'
-        }}>
-          {errorMessage}
-      </div>
+        <div style={{ 
+          color: 'red', 
+          textAlign: 'center',
+          padding: '20px',
+          backgroundColor: '#ffe6e6',
+          borderRadius: '5px'
+          }}>
+            {errorMessage}
+        </div>
       )}
 
       <IonContent className="ion-padding reggae-font" style={{ '--background': '#C5472A' }}>
