@@ -80,6 +80,24 @@ public class ApiControllers {
         return "Saved...";
     }
 
+    @PutMapping(value = "/updateLocation/{locationId}")
+    public String updateLocation(@PathVariable long locationId, @RequestBody Location location) {
+        Location updatedLocation = locationRepo.findById(locationId).get();
+        updatedLocation.setName(location.getName()); 
+        updatedLocation.setDetails(location.getDetails());
+        updatedLocation.setAddress(location.getAddress());
+        updatedLocation.setCreatedAt(location.getCreatedAt());
+        locationRepo.save(updatedLocation);
+        return "Updated...";
+    }
+
+    @DeleteMapping(value = "/deleteLocation/{id}")
+    public String deleteLocation(@PathVariable long id) {
+        Location deleteLocation = locationRepo.findById(id).get();
+        locationRepo.delete(deleteLocation);
+        return "Delete location with the id: "+id;
+    }
+    
     // Get all favourites for a specific user
 @GetMapping("/users/{userId}/favorites")
 public List<Favorite> getFavoritesByUser(@PathVariable String userId) {
@@ -118,23 +136,7 @@ public String deleteFavoriteForUser(
   return "Deleted favorite for user " + userId + " and restaurant " + restaurantName;
 }
 
-    @PutMapping(value = "/updateLocation/{locationId}")
-    public String updateLocation(@PathVariable long locationId, @RequestBody Location location) {
-        Location updatedLocation = locationRepo.findById(locationId).get();
-        updatedLocation.setName(location.getName()); 
-        updatedLocation.setDetails(location.getDetails());
-        updatedLocation.setAddress(location.getAddress());
-        updatedLocation.setCreatedAt(location.getCreatedAt());
-        locationRepo.save(updatedLocation);
-        return "Updated...";
-    }
-
-    @DeleteMapping(value = "/deleteLocation/{id}")
-    public String deleteLocation(@PathVariable long id) {
-        Location deleteLocation = locationRepo.findById(id).get();
-        locationRepo.delete(deleteLocation);
-        return "Delete location with the id: "+id;
-    }
+    
 
     @GetMapping(value = "/favorites")
     public List<Favorite> getFavorites() {
