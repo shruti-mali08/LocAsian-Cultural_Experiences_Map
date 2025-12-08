@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
+
+.reggae-one-regular {
+  font-family: "Reggae One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.reggae-font {
+    font-family: "Reggae One", system-ui;
+}
+
+.title-font {
+    font-family: "Reggae One", system-ui;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}

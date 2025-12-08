@@ -3,25 +3,27 @@ package com.locasian.app.rest.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping; 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-
-import com.locasian.app.rest.Models.Users;
 import com.locasian.app.rest.Models.Location;
 import com.locasian.app.rest.Models.Favorite;
 import com.locasian.app.rest.Models.Review;
-
-import com.locasian.app.rest.Repo.UsersRepo;
+import com.locasian.app.rest.Models.Users;
 import com.locasian.app.rest.Repo.LocationRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
+import com.locasian.app.rest.Repo.UsersRepo;
 
 @CrossOrigin(origins = "http://localhost:8100")
 @RestController
@@ -36,6 +38,9 @@ public class ApiControllers {
     @Autowired
     private ReviewRepo reviewRepo;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping("/")
     public String getPage() {
         return ("Welcome");
@@ -46,11 +51,26 @@ public class ApiControllers {
         return usersRepo.findAll();
     }
 
-    @PostMapping(value = "/saveUser")
-    public String saveUsers(@RequestBody Users user) {
-        usersRepo.save(user);
-        return "Saved...";
+    @GetMapping("/users/exists")
+    public boolean usernameExists(@RequestParam String username) {
+        return usersRepo.existsByUsername(username);
     }
+
+
+    @PostMapping("/saveUser")
+    public ResponseEntity<?> saveUsers(@RequestBody Users user) {
+
+        if (usersRepo.existsByUsername(user.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Username already exists");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
+        usersRepo.save(user);
+        return ResponseEntity.ok("User saved successfully");
+    }
+
 
     @PutMapping(value = "/updateUser/{userId}")
     public String updateUser(@PathVariable long userId, @RequestBody Users user) {
@@ -177,7 +197,7 @@ public String deleteFavoriteForUser(
         return "Saved...";
     }
 
-    @PutMapping(value = "/updateReview/{id}")//title body userId rating
+    @PutMapping(value = "/updateReview/{id}")
     public String updateReview(@PathVariable long id, @RequestBody Review review) {
         Review updatedReview = reviewRepo.findById(id).get();
         updatedReview.setTitle(review.getTitle());
