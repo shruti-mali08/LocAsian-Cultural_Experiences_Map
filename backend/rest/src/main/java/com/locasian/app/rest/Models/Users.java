@@ -6,19 +6,21 @@ import jakarta.persistence.*;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_id;
+    private long userId;
     @Column
     private String username;
     @Column
-    private LocalDateTime created_at;
+    private String password;
+    @Column
+    private LocalDateTime createdAt;
 
 
-public long getUser_id() {
-    return user_id;
+public long getUserId() {
+    return userId;
 }
 
-public void setUser_id(long user_id) {
-    this.user_id = user_id;
+public void setUserId(long userId) {
+    this.userId = userId;
 }
 
 public String getUsername() {
@@ -29,11 +31,19 @@ public void setUsername(String username) {
     this.username = username;
 }
 
-public LocalDateTime getCreated_at() {
-    return created_at;
+public String getPassword() {
+    return password;
 }
 
-public void setCreated_at(LocalDateTime created_at) {
-    this.created_at = created_at;
+public void setPassword(String password) {
+    this.password = password;
+}
+
+public LocalDateTime getCreatedAt() {
+    return createdAt;
+}
+
+public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
 } 
 }

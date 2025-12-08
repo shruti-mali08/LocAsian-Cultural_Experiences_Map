@@ -1,5 +1,7 @@
 package com.locasian.app.rest.Controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping; 
@@ -12,13 +14,27 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 import com.locasian.app.rest.Models.Users;
-import com.locasian.app.rest.Repo.UsersRepo;
+import com.locasian.app.rest.Models.Event;
+import com.locasian.app.rest.Models.Favorite;
+import com.locasian.app.rest.Models.Review;
 
+import com.locasian.app.rest.Repo.UsersRepo;
+import com.locasian.app.rest.Repo.EventRepo;
+import com.locasian.app.rest.Repo.FavoriteRepo;
+import com.locasian.app.rest.Repo.ReviewRepo;
+
+@CrossOrigin(origins = "http://localhost:8100")
 @RestController
 public class ApiControllers {
 
     @Autowired
     private UsersRepo usersRepo;
+    @Autowired
+    private EventRepo eventRepo;
+    @Autowired
+    private FavoriteRepo favoriteRepo;
+    @Autowired
+    private ReviewRepo reviewRepo;
 
     @GetMapping("/")
     public String getPage() {
@@ -30,25 +46,153 @@ public class ApiControllers {
         return usersRepo.findAll();
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/saveUser")
     public String saveUsers(@RequestBody Users user) {
         usersRepo.save(user);
         return "Saved...";
     }
 
-    @PutMapping(value = "/update/{user_id}")
-    public String updateUser(@PathVariable long user_id, @RequestBody Users user) {
-        Users updatedUser = usersRepo.findById(user_id).get();
+    @PutMapping(value = "/updateUser/{userId}")
+    public String updateUser(@PathVariable long userId, @RequestBody Users user) {
+        Users updatedUser = usersRepo.findById(userId).get();
         updatedUser.setUsername(user.getUsername()); 
-        updatedUser.setCreated_at(user.getCreated_at());
+        updatedUser.setPassword(user.getPassword()); 
+        updatedUser.setCreatedAt(user.getCreatedAt());
         usersRepo.save(updatedUser);
         return "Updated...";
     }
 
-    @DeleteMapping(value = "/delete/{user_id}")
-    public String deleteUser(@PathVariable long user_id) {
-        Users deleteUsers = usersRepo.findById(user_id).get();
+    @DeleteMapping(value = "/deleteUser/{userId}")
+    public String deleteUser(@PathVariable long userId) {
+        Users deleteUsers = usersRepo.findById(userId).get();
         usersRepo.delete(deleteUsers);
-        return "Delete user with the id: "+user_id;
+        return "Delete user with the id: "+userId;
+    }
+
+    @GetMapping(value = "/events")
+    public List<Event> getEvents() {
+        return eventRepo.findAll();
+    }
+
+    @PostMapping(value = "/saveEvent")
+    public String saveEvent(@RequestBody Event event) {
+        eventRepo.save(event);
+        return "Saved...";
+    }
+
+    // Get all favourites for a specific user
+@GetMapping("/users/{userId}/favorites")
+public List<Favorite> getFavoritesByUser(@PathVariable String userId) {
+  return favoriteRepo.findByUserId(userId);
+}
+
+// Add a favourite for a user
+@PostMapping("/users/{userId}/favorites")
+public Favorite addFavoriteForUser(
+ @PathVariable String userId,
+ @RequestBody Favorite favorite
+) {
+    // Avoid duplicates: if this user already favourited this restaurant, just return it
+ Favorite existing = favoriteRepo.findByUserIdAndRestaurantName(
+  userId,
+  favorite.getRestaurantName()
+ );
+ if(existing != null){
+  return existing;
+ }
+
+ favorite.setUserId(userId);
+  if (favorite.getCreatedAt() == null) {
+ favorite.setCreatedAt(java.time.LocalDateTime.now());
+ }
+  return favoriteRepo.save(favorite);
+}
+
+// Remove a favourite for a user + restaurant
+@DeleteMapping("/users/{userId}/favorites/{restaurantName}")
+public String deleteFavoriteForUser(
+  @PathVariable String userId,
+   @PathVariable String restaurantName
+) {
+ favoriteRepo.deleteByUserIdAndRestaurantName(userId, restaurantName);
+  return "Deleted favorite for user " + userId + " and restaurant " + restaurantName;
+}
+
+    @PutMapping(value = "/updateEvent/{eventId}")
+    public String updateEvent(@PathVariable long eventId, @RequestBody Event event) {
+        Event updatedEvent = eventRepo.findById(eventId).get();
+        updatedEvent.setTitle(event.getTitle()); 
+        updatedEvent.setBody(event.getBody());
+        updatedEvent.setAuthorId(event.getAuthorId());
+        updatedEvent.setStartTime(event.getStartTime());
+        updatedEvent.setEndTime(event.getEndTime());
+        updatedEvent.setCreatedAt(event.getCreatedAt());
+        eventRepo.save(updatedEvent);
+        return "Updated...";
+    }
+
+    @DeleteMapping(value = "/deleteEvent/{id}")
+    public String deleteEvent(@PathVariable long id) {
+        Event deleteEvent = eventRepo.findById(id).get();
+        eventRepo.delete(deleteEvent);
+        return "Delete event with the id: "+id;
+    }
+
+    @GetMapping(value = "/favorites")
+    public List<Favorite> getFavorites() {
+        return favoriteRepo.findAll();
+    }
+
+    @PostMapping(value = "/saveFavorite")
+    public String saveFavorite(@RequestBody Favorite favorite) {
+        favoriteRepo.save(favorite);
+        return "Saved...";
+    }
+
+    @PutMapping(value = "/updateFavorite/{id}")
+    public String updateFavorite(@PathVariable long id, @RequestBody Favorite favorite) {
+        Favorite updatedFavorite = favoriteRepo.findById(id).get();
+        updatedFavorite.setUserId(favorite.getUserId());
+        updatedFavorite.setRestaurantName(favorite.getRestaurantName());
+        updatedFavorite.setCreatedAt(favorite.getCreatedAt());
+        favoriteRepo.save(updatedFavorite);
+        return "Updated...";
+    }
+
+    @DeleteMapping(value = "/deleteFavorite/{id}")
+    public String deleteFavorite(@PathVariable long id) {
+        Favorite deleteFavorite = favoriteRepo.findById(id).get();
+        favoriteRepo.delete(deleteFavorite);
+        return "Delete favorite with the id: "+id;
+    }
+
+    @GetMapping(value = "/reviews")
+    public List<Review> getReviews() {
+        return reviewRepo.findAll();
+    }
+
+    @PostMapping(value = "/saveReview")
+    public String saveReview(@RequestBody Review review) {
+        reviewRepo.save(review);
+        return "Saved...";
+    }
+
+    @PutMapping(value = "/updateReview/{id}")//title body userId rating
+    public String updateReview(@PathVariable long id, @RequestBody Review review) {
+        Review updatedReview = reviewRepo.findById(id).get();
+        updatedReview.setTitle(review.getTitle());
+        updatedReview.setBody(review.getBody());
+        updatedReview.setUserId(review.getUserId());
+        updatedReview.setRating(review.getRating());
+        updatedReview.setCreatedAt(review.getCreatedAt());
+        reviewRepo.save(updatedReview);
+        return "Updated...";
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteReview(@PathVariable long id) {
+        Review deleteReview = reviewRepo.findById(id).get();
+        reviewRepo.delete(deleteReview);
+        return "Delete review with the id: "+id;
     }
 }
