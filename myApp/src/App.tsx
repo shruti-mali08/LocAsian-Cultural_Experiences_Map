@@ -34,6 +34,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import FavoritesPage from './pages/FavoritePage';
+import Events from './pages/Events';
 
 setupIonicReact();
 
@@ -51,6 +52,9 @@ const App: React.FC = () => (
         
         <Route exact path="/search">
           <SearchPage />
+        </Route>
+        <Route exact path="/events">
+          <Events />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />

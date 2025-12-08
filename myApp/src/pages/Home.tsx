@@ -10,8 +10,6 @@ import { getFavorites, saveFavorite, removeFavorite } from '../services/favorite
 import appLogo from '../assets/icons/AppLogo.svg';
 import favorite from '../assets/icons/favorite.svg'
 import restaurant from '../assets/icons/restaurant.svg'
-import cart from '../assets/icons/cart.svg'
-import temple from '../assets/icons/temple.svg';
 import events from '../assets/icons/event.svg'
 
 import './Home.css';
@@ -203,22 +201,7 @@ const Home: React.FC = () => {
               Favorite
             </IonSegmentButton>
 
-            <IonSegmentButton value="restaurant">
-              <IonIcon icon={restaurant}></IonIcon>
-              Restaurant
-            </IonSegmentButton>
-
-            <IonSegmentButton value="cart">
-              <IonIcon icon={cart}></IonIcon>
-              Grocery Stores
-            </IonSegmentButton>
-
-            <IonSegmentButton value="cultural">
-              <IonIcon icon={temple}></IonIcon>
-              Cultural Spots
-            </IonSegmentButton>
-
-            <IonSegmentButton value="events">
+            <IonSegmentButton value="events" onClick={() => history.push('/events')}>
               <IonIcon icon={events}></IonIcon>
               Events
             </IonSegmentButton>
