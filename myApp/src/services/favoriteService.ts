@@ -124,6 +124,7 @@ export async function removeFavorite(id: string): Promise<FavoriteMap> {
 
   try {
     await removeBackendFavorite(id);
+    console.log("Removed favourite from backend:", id);
   } catch (e) {
     console.error("Failed to remove favourite in backend", e);
   }
