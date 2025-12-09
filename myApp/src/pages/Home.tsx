@@ -291,38 +291,37 @@ const Home: React.FC = () => {
   // --------------------------------
 
   const handleLikeClick = async () => {
-    if (!clickedPosition) return;
+  if (!clickedPosition) return;
 
-    const poskey = `${clickedPosition.lat.toFixed(6)}_${clickedPosition.lng.toFixed(6)}`;
+  const poskey = `${clickedPosition.lat.toFixed(6)}_${clickedPosition.lng.toFixed(6)}`;
 
-    if (isLiked) {
-      const updated = await removeFavorite(poskey);
-      setFavoriteLocations(updated);
-      setIsLiked(false);
-      console.log('🗑️ Removed from favorites');
-    }
-    else {
-      const favoriteData = {
-        id: poskey,
-        name: selectedPlace ? selectedPlace.name : `Location (${clickedPosition.lat.toFixed(4)}, ${clickedPosition.lng.toFixed(4)})`,
-        address: selectedPlace?.address || "",
-        lat: clickedPosition.lat,
-        lng: clickedPosition.lng,
-        timestamp: Date.now()
-      };
-      
-      console.log('💾 Saved to favorites:', favoriteData.name);
-      
-      // Save to localStorage
-      const existing = JSON.parse(localStorage.getItem('favoriteLocations') || '{}');
-      existing[poskey] = favoriteData;
-      localStorage.setItem('favoriteLocations', JSON.stringify(existing));
-      
-      // Update state
-      setFavoriteLocations(existing);
-      setIsLiked(true);
-    }
-  };
+  if (isLiked) {
+    // UNLIKE → uses backend service
+    const updated = await removeFavorite(poskey);
+    setFavoriteLocations(updated);
+    setIsLiked(false);
+    console.log('🗑️ Removed from favorites');
+  } else {
+    // LIKE use saveFavorite so it talks to backend + localStorage
+    const name =
+      selectedPlace?.name ||
+      `Location (${clickedPosition.lat.toFixed(4)}, ${clickedPosition.lng.toFixed(4)})`;
+
+    const favoriteData = {
+      name,
+      city: "",         
+      cuisine: "",       
+      lat: clickedPosition.lat,
+      lng: clickedPosition.lng,
+    };
+
+    console.log('💾 Saved to favorites (via service):', favoriteData.name);
+
+    const updated = await saveFavorite(poskey, favoriteData);
+    setFavoriteLocations(updated);
+    setIsLiked(true);
+  }
+};
 
   const handleCloseButton = () => {
     // Clear marker

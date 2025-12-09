@@ -24,7 +24,10 @@ import com.locasian.app.rest.Repo.EventRepo;
 import com.locasian.app.rest.Repo.FavoriteRepo;
 import com.locasian.app.rest.Repo.ReviewRepo;
 
-@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:8100" })
+@CrossOrigin(origins = {
+    "http://localhost:5173",   
+    "http://localhost:8100"    
+})
 @RestController
 public class ApiControllers {
 
