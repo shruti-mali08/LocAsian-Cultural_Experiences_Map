@@ -548,6 +548,7 @@ const Home: React.FC = () => {
                   )}
                 </div>
                 
+                {/* Close button for favorite button panel */}
                 <button
                   onClick={handleCloseButton}
                   style={{
@@ -567,6 +568,7 @@ const Home: React.FC = () => {
                 </button>
               </div>
 
+              {/* Like / Unlike button */} 
               <IonButton
                 fill="solid"
                 color={isLiked ? "danger" : "medium"}
