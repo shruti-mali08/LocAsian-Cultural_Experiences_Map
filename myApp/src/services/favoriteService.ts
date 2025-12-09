@@ -75,30 +75,26 @@ function saveLocalFavorites(map: FavoriteMap) {
 
 // Get favourites (sync backend → localStorage → return map)
 export async function getFavorites(): Promise<FavoriteMap> {
-  try {
-    const backend = await fetchBackendFavorites(); 
+  const local = loadLocalFavorites();
 
-    const result: FavoriteMap = {};
+  try {
+    const backend = await fetchBackendFavorites();
 
     backend.forEach((fav) => {
-      const key = fav.restaurantName; // our position key from backend
-      result[key] = {
-        name: `Location ${key}`, 
-      };
+      const key = fav.restaurantName; // our position key
+      if (!local[key]) {
+        // create stub if we don't have details yet
+        local[key] = { name: `Location ${key}` };
+      }
     });
 
-    saveLocalFavorites(result); // keep local cache synced
-
-    console.log(`Loaded favorites from BACKEND: ${backend.length} locations`);
-    return result;
+    saveLocalFavorites(local);
   } catch (e) {
-    console.error("Backend failed, falling back to LOCALSTORAGE", e);
-    const local = loadLocalFavorites();
-    console.log(
-      `Loaded favorites from LOCALSTORAGE: ${Object.keys(local).length} locations`
-    );
-    return local;
+    console.error("Failed to sync favourites with backend", e);
+    // if backend fails we just use local
   }
+
+  return local;
 }
 
 // Save/like a location (id is the posKey string)
