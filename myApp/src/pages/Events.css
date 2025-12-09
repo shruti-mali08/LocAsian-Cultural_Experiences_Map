@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
+
+.reggae-font {
+    font-family: "Reggae One", system-ui;
+}
+
+.location-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 16px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card-content {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.card-content p {
+    margin: 8px 0;
+}
+
+.card-divider {
+    border: none;
+    border-top: 2px solid #ddd;
+    margin: 0 16px;
+}
