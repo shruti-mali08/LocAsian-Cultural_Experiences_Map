@@ -1,13 +1,15 @@
-# Locasian - Asian Cultural Experiences Map
+# LocAsian - Asian Cultural Experiences Map
 
 A mobile application for discovering Asian restaurants and cultural experiences in your area.
 
 ## Live Demo
-<video controls width=500px height=auto>
-    <source src="./static/assets/CS1530 - LocAsian Final Project (compressed).mp4" type="video/mp4">
-</video>
 
-[Trouble playing or seeking? Click here to open the video file directly.](./static/assets/CS1530%20-%20LocAsian%20Final%20Project%20(compressed).mp4)
+You can see the application in action here:
+
+▶️ **[Watch the Project Demo Video](https://github.com/user-attachments/assets/1fef6f82-1c44-4f8d-a487-3febcca02ee1)**
+
+> 💡 **Tip:** If the link above doesn't open instantly, you can also access the raw video file [directly here](https://github.com/user-attachments/assets/1fef6f82-1c44-4f8d-a487-3febcca02ee1).
+
 
 ## Tech Stack
 
