@@ -2,6 +2,13 @@
 
 A mobile application for discovering Asian restaurants and cultural experiences in your area.
 
+## Live Demo
+<video controls width=500px height=auto>
+    <source src="./static/assets/CS1530 - LocAsian Final Project.mp4" type="video/mp4">
+</video>
+
+[Trouble playing or seeking? Click here to open the video file directly.](./static/assets/CS1530%20-%20LocAsian%20Final%20Project.mp4)
+
 ## Tech Stack
 
 - **Frontend**: Ionic React
