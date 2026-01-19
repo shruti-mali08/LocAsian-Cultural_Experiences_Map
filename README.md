@@ -11,7 +11,7 @@ You can see the application in action here:
 > 💡 **Tip:** If the link above doesn't open instantly, you can also access the raw video file [directly here](./static/assets/CS1530%20-%20LocAsian%20Final%20Project%20(compressed).mp4).
 
 ## My Contributions (Shruti Mali)
-**Role: Frontend Lead | Scrum Master | Product Owner**
+**Front-end Lead | Scrum Master | Product Owner**
 
 - Took ownership of the app's interface and interactions, shaping product ideas into a usable mobile experience using **Ionic and React**.
 - Created initial low-fidelity skeletons in **Figma**, which served as the functional guide; the final UI was refined during development process.
@@ -158,7 +158,7 @@ You can see the application in action here:
 
 ## Tech Stack
 
-- **Frontend**: Ionic React, CSS, JSON, TypeScript
+- **Front-end**: Ionic React, CSS, JSON, TypeScript
 - **Backend**: Spring Boot (Java)
 - **Database**: MySQL 8.0 (Docker)
 
@@ -200,7 +200,7 @@ From the `backend/rest` directory:
 
 Backend runs on: **http://localhost:8080**
 
-### 3. Run the Frontend
+### 3. Run the Front-end
 
 From the `myApp` directory:
 
@@ -209,7 +209,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs on: **http://localhost:8100**
+Front-end runs on: **http://localhost:8100**
 
 ## Testing with Postman
 
