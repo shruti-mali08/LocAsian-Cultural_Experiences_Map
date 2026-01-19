@@ -11,14 +11,14 @@ You can see the application in action here:
 > 💡 **Tip:** If the link above doesn't open instantly, you can also access the raw video file [directly here](https://github.com/user-attachments/assets/1fef6f82-1c44-4f8d-a487-3febcca02ee1).
 
 ## My Contributions (Shruti Mali)
-Role: Frontend Lead | Scrum Master | Product Owner
+**Role: Frontend Lead | Scrum Master | Product Owner**
 
-- Took ownership of the app's interface and interactions, shaping product ideas into a usable mobile experience using Ionic and React.
-- Developed a culturally themed Google Maps interface using Snazzy Maps tool, applying warm, Asian-inspired color palettes informed by Wu Xing (Five Elements) Philosophy to create culturally and cohesive grounded visual system.
+- Took ownership of the app's interface and interactions, shaping product ideas into a usable mobile experience using **Ionic and React**.
+- Developed a **culturally themed Google Maps** interface using **Snazzy Maps tool**, applying warm, Asian-inspired color palettes informed by **Wu Xing (Five Elements) Philosophy** to create culturally and cohesive grounded visual system.
 - Set up the environment, created the home page, integrated Google Maps functionality. 
-- Iteratively adjusted layout structure, spacing, and UI components to improve clarity, coherence, and ease of use.
-- Guided sprint planning and feature prioritization so user-facing functionality was delivered efficiently.
-- Served as Scrum Master (Sprint 1), coordinating workflow and team tasks, and as Product Owner (Sprint 3-4), managing priorities and project goals, in addition to contributing as a developer. 
+- Iteratively adjusted layout structure, spacing, and **UI components** to improve clarity, coherence, and ease of use.
+- Guided **sprint planning and feature prioritization** so user-facing functionality was delivered efficiently.
+- Served as **Scrum Master** (Sprint 1), coordinating workflow and team tasks, and as **Product Owner** (Sprint 3-4), managing priorities and project goals, in addition to contributing as a developer. 
 
 
 ### Choice of Colors and Their Relationship to Wu Xing Philosophy: 
