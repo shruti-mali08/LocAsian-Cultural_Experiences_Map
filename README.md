@@ -8,33 +8,157 @@ You can see the application in action here:
 
 ▶️ **[Watch the Project Demo Video](https://github.com/user-attachments/assets/1fef6f82-1c44-4f8d-a487-3febcca02ee1)**
 
-> 💡 **Tip:** If the link above doesn't open instantly, you can also access the raw video file [directly here](https://github.com/user-attachments/assets/1fef6f82-1c44-4f8d-a487-3febcca02ee1).
+> 💡 **Tip:** If the link above doesn't open instantly, you can also access the raw video file [directly here](./static/assets/CS1530%20-%20LocAsian%20Final%20Project%20(compressed).mp4).
 
 ## My Contributions (Shruti Mali)
 **Role: Frontend Lead | Scrum Master | Product Owner**
 
 - Took ownership of the app's interface and interactions, shaping product ideas into a usable mobile experience using **Ionic and React**.
+- Created initial low-fidelity skeletons in **Figma**, which served as the functional guide; the final UI was refined during development process.
 - Developed a **culturally themed Google Maps** interface using **Snazzy Maps tool**, applying warm, Asian-inspired color palettes informed by **Wu Xing (Five Elements) Philosophy** to create culturally and cohesive grounded visual system.
 - Set up the environment, created the home page, integrated Google Maps functionality. 
 - Iteratively adjusted layout structure, spacing, and **UI components** to improve clarity, coherence, and ease of use.
 - Guided **sprint planning and feature prioritization** so user-facing functionality was delivered efficiently.
 - Served as **Scrum Master** (Sprint 1), coordinating workflow and team tasks, and as **Product Owner** (Sprint 3-4), managing priorities and project goals, in addition to contributing as a developer. 
 
+<p>Click on the images to enlarge</p>
+<table>
+    <tr>
+        <th>
+            Mobile Phone Preview
+        </th>
+        <th>
+            Figma Preview
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <img width="auto" height="400" alt="image" src="./static/assets/mobile-locasian.png" />
+        </td>
+        <td>
+            <img width="auto" height="400" alt="image" src="./static/assets/figma-locasian.png" />
+        </td>
+    </tr>
+</table>
+
 
 ### Choice of Colors and Their Relationship to Wu Xing Philosophy: 
-- **Shade of Gold (Landmass - #EA9D44):** Symbolizes prosperity and stability; associated with the Earth element. 
-- **Dark shade of Red (Logo - #C6472B):** Reflects luck and vitality; associated with the Fire element.
-- **Sage Green (Parks - #C6D9A6):** Represents growth and renewal; aligned with the Wood element.
-- **Off-white color (Roads - #FBEEDC):** Conveys clarity and purity; associated with the Metal element.
-- **Shade of Cyan (Water - #3C8CA2):** Evokes calm, healing, and fluidity; connected to the Water element. 
 
-> Note: This was a collaborative team project. This README highlights my individual contributions. 
+<table>
+  <thead>
+    <tr>
+      <th>
+        Element
+      </th>
+      <th>
+        Feature
+      </th>
+      <th>
+        Hex Code
+      </th>
+      <th>
+        Color Name
+      <th>
+        Significance
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Earth
+      </td>
+      <td>
+        Landmass
+      </td>
+      <td>
+        #EA9D44
+      </td>
+      <td>
+        Shade of Gold
+      </td>
+      <td>
+        Prosperity and Stability
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Fire
+      </td>
+      <td>
+        Logo
+      </td>
+      <td>
+        #C6472B
+      </td>
+      <td>
+        Dark Shade of Red
+      </td>
+      <td>
+        Luck and Vitality
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Wood
+      </td>
+      <td>
+        Parks
+      </td>
+      <td>
+        #C6D9A6
+      </td>
+      <td>
+        Sage Green
+      </td>
+      <td>
+        Growth and Renewal
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Metal
+      </td>
+      <td>
+        Roads
+      </td>
+      <td>
+        #FBEEDC
+      </td>
+      <td>
+        Off-white
+      </td>
+      <td>
+        Clarity and Purity
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Water
+      </td>
+      <td>
+        Water
+      </td>
+      <td>
+        #3C8CA2
+      </td>
+      <td>
+        Shade of Cyan
+      </td>
+      <td>
+        Healing and Fluidity
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+> Note: This was a collaborative team project. Above README highlights my individual contributions. 
 
 ---
 
 ## Tech Stack
 
-- **Frontend**: Ionic React
+- **Frontend**: Ionic React, CSS, JSON, TypeScript
 - **Backend**: Spring Boot (Java)
 - **Database**: MySQL 8.0 (Docker)
 
